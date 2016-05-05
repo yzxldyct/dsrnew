@@ -1,0 +1,41 @@
+<include file="Public/header" title="添加用户" />
+<div id="page-wrapper">
+<form action="{:U('Qyhuser/adduser')}" method="post">
+	<div class="form-group">
+		<label>userid</label>
+		<input class="form-control" type="text" name="userid" placeholder="userid">
+	</div>
+	<div class="form-group">
+		<label>姓名</label>
+		<input class="form-control" type="text" name="name" placeholder="name">
+	</div>
+	<div class="form-group">
+		<label>部门</label>
+		<input class="form-control" type="text" name="department" placeholder="department">
+	</div>
+	<div class="form-group">
+		<label>手机</label>
+		<input class="form-control" type="text" name="mobile" placeholder="mobile">
+	</div>
+	<div class="form-group">
+		<label>weixinid</label>
+		<input class="form-control" type="text" name="weixinid" placeholder="weixinid">
+	</div>
+	<div class="form-group">
+        <label>sex</label>
+        <label class="radio-inline">
+          <input type="radio" name="gender" id="type" value="1" checked="checked">男
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="gender" id="type" value="2">女
+        </label>
+    </div>
+	<div class="form-group">
+		<button class="btn btn-success" type="submit" >添加</button>
+	</div>
+
+
+</form>
+</div>
+
+<include file="Public/footer" />

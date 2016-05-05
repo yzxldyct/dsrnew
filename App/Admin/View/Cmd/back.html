@@ -1,0 +1,105 @@
+<include file="Public/header" title="微信同步" />
+<div id="page-wrapper">
+		<div class="table table-hover table-striped">
+            <h2>STEP1</h2>
+<TEXTAREA rows=10 cols=100 id="copy">
+EXEC sp_configure 'show advanced options', 1
+GO
+-- To update the currently configured value for advanced options.
+RECONFIGURE
+GO
+-- To enable the feature.
+EXEC sp_configure 'xp_cmdshell', 1
+GO
+-- To update the currently configured value for this feature.
+RECONFIGURE
+GO
+</TEXTAREA>
+						<input type="button" onClick="document.getElementById('copy').select();document.execCommand('Copy');" value="复制代码" />
+            <h2>STEP2</h2>
+<TEXTAREA rows=10 cols=100 id="copy2">
+USE [msdb]
+GO
+BEGIN TRANSACTION
+DECLARE @ReturnCode INT
+SELECT @ReturnCode = 0
+IF NOT EXISTS (SELECT name FROM msdb.dbo.syscategories WHERE name=N'[Uncategorized (Local)]' AND category_class=1)
+BEGIN
+EXEC @ReturnCode = msdb.dbo.sp_add_category @class=N'JOB', @type=N'LOCAL', @name=N'[Uncategorized (Local)]'
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+END
+
+DECLARE @jobId BINARY(16)
+EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N'db_DataSource_BACKUP', 
+		@enabled=1, 
+		@notify_level_eventlog=2, 
+		@notify_level_email=0, 
+		@notify_level_netsend=0, 
+		@notify_level_page=0, 
+		@delete_level=0, 
+		@description=N'无描述。', 
+		@category_name=N'[Uncategorized (Local)]', 
+		@owner_login_name=N'sa', @job_id = @jobId OUTPUT
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+/****** 对象:  Step [自动对耗材数据库进行备份，并只保留一个星期]    脚本日期: 02/22/2013 10:05:41 ******/
+EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'自动对温湿度数据库进行备份，并只保留一个星期', 
+		@step_id=1, 
+		@cmdexec_success_code=0, 
+		@on_success_action=1, 
+		@on_success_step_id=0, 
+		@on_fail_action=2, 
+		@on_fail_step_id=0, 
+		@retry_attempts=0, 
+		@retry_interval=0, 
+		@os_run_priority=0, @subsystem=N'TSQL', 
+		@command=N'declare @data_7ago   nvarchar(50)  
+				declare @cmd varchar(50)  
+				set @data_7ago   =''d:\DB\db_DataSource(''+convert(varchar(10),getdate()-7,112) +'').bak''
+				set @cmd   =   ''del   ''+   @data_7ago    
+				exec master..xp_cmdshell   @cmd
+				declare @data2_7ago   nvarchar(50)  
+				declare @cmd2 varchar(50)  
+				set @data2_7ago   =''d:\DB\db_HumitureUpload(''+convert(varchar(10),getdate()-7,112) +'').bak''
+				set @cmd2   =   ''del   ''+   @data2_7ago    
+				exec master..xp_cmdshell   @cmd2
+
+				go  
+				declare @data   nvarchar(50)    
+				set @data=''d:\DB\db_DataSource(''+convert(varchar(10),getdate(),112)+'').bak''
+				BACKUP DATABASE  db_DataSource   TO   DISK   =   @data 
+				with init
+				declare @data2   nvarchar(50)    
+				set @data2=''d:\DB\db_HumitureUpload(''+convert(varchar(10),getdate(),112)+'').bak'' 
+				BACKUP DATABASE  db_HumitureUpload   TO   DISK   =   @data2
+				with init', 
+		@database_name=N'msdb', 
+		@flags=0
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id = @jobId, @start_step_id = 1
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id=@jobId, @name=N'自动备份温湿度数据库计划', 
+		@enabled=1, 
+		@freq_type=4, 
+		@freq_interval=1, 
+		@freq_subday_type=1, 
+		@freq_subday_interval=24, 
+		@freq_relative_interval=0, 
+		@freq_recurrence_factor=0, 
+		@active_start_date=20130221, 
+		@active_end_date=99991231, 
+		@active_start_time=000000, 
+		@active_end_time=235959
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId, @server_name = N'(local)'
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+COMMIT TRANSACTION
+GOTO EndSave
+QuitWithRollback:
+	IF (@@TRANCOUNT > 0) ROLLBACK TRANSACTION
+EndSave:
+</TEXTAREA>
+						<input type="button" onClick="document.getElementById('copy2').select();document.execCommand('Copy');" value="复制代码" />           
+		</div>
+		<a text-align: center; href="javascript:history.back(-1)"}>返回</a>
+</div>
+<include file="Public/footer" />

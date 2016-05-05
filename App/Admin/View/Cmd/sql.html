@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SQL开启CURL</title>
+</head>
+<body>
+<div>
+<h2>STEP1</h2>
+<TEXTAREA rows=10 cols=100 id="copy">
+CREATE PROCEDURE P_GET_HttpRequestData(
+	@URL varchar(500),
+	@status int=0 OUT,
+	@returnText varchar(2000)='' OUT
+)
+AS
+BEGIN
+	DECLARE @object int,
+	@errSrc int
+	/*初始化对*/
+	EXEC @status = SP_OACreate 'Msxml2.ServerXMLHTTP.3.0', @object OUT
+	IF @status <> 0
+	BEGIN
+	 EXEC SP_OAGetErrorInfo @object, @errSrc OUT, @returnText OUT
+	 RETURN
+	END
+
+	/*创建链接*/
+	EXEC @status= SP_OAMethod @object,'open',NULL,'GET',@URL
+	IF @status <> 0
+	BEGIN
+	 EXEC SP_OAGetErrorInfo @object, @errSrc OUT, @returnText OUT
+	 RETURN
+	END
+	EXEC @status=SP_OAMethod @object,'setRequestHeader','Content-Type','application/x-www-form-urlencoded'
+	/*发起请求*/
+	EXEC @status= SP_OAMethod @object,'send',NULL 
+	IF @status <> 0 
+	BEGIN 
+	 EXEC SP_OAGetErrorInfo @object, @errSrc OUT, @returnText OUT
+	 RETURN
+	END
+     
+	/*获取返回*/
+	EXEC @status= SP_OAGetProperty @object,'responseText',@returnText OUT
+	IF @status <> 0 
+	BEGIN 
+	 EXEC SP_OAGetErrorInfo @object, @errSrc OUT, @returnText OUT
+	 RETURN
+	END
+END;
+</TEXTAREA>
+<input type="button" onClick="document.getElementById('copy').select();document.execCommand('Copy');" value="复制代码" />
+</div>
+<div>
+<h2>STEP2</h2>
+<TEXTAREA rows=10 cols=100 id="copy2">
+USE [msdb]
+GO
+BEGIN TRANSACTION
+DECLARE @ReturnCode INT
+SELECT @ReturnCode = 0
+IF NOT EXISTS (SELECT name FROM msdb.dbo.syscategories WHERE name=N'[Uncategorized (Local)]' AND category_class=1)
+BEGIN
+EXEC @ReturnCode = msdb.dbo.sp_add_category @class=N'JOB', @type=N'LOCAL', @name=N'[Uncategorized (Local)]'
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+
+END
+
+DECLARE @jobId BINARY(16)
+EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N'msgup', 
+		@enabled=1, 
+		@notify_level_eventlog=0, 
+		@notify_level_email=0, 
+		@notify_level_netsend=0, 
+		@notify_level_page=0, 
+		@delete_level=0, 
+		@description=N'无描述。', 
+		@category_name=N'[Uncategorized (Local)]', 
+		@owner_login_name=N'sa', @job_id = @jobId OUTPUT
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'msgup', 
+		@step_id=1, 
+		@cmdexec_success_code=0, 
+		@on_success_action=1, 
+		@on_success_step_id=0, 
+		@on_fail_action=2, 
+		@on_fail_step_id=0, 
+		@retry_attempts=0, 
+		@retry_interval=0, 
+		@os_run_priority=0, @subsystem=N'TSQL', 
+		@command=N'DECLARE @urlStr VARCHAR(255)
+
+SET @urlStr = "http://dsr.utt8.com/home/msgup/index/qyid/xxxx";
+
+EXEC P_GET_HttpRequestData  @urlStr;', 
+		@database_name=N'master', 
+		@flags=0
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id = @jobId, @start_step_id = 1
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id=@jobId, @name=N'msgup', 
+		@enabled=1, 
+		@freq_type=4, 
+		@freq_interval=1, 
+		@freq_subday_type=4, 
+		@freq_subday_interval=15, 
+		@freq_relative_interval=0, 
+		@freq_recurrence_factor=0, 
+		@active_start_date=20151022, 
+		@active_end_date=99991231, 
+		@active_start_time=0, 
+		@active_end_time=235959
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId, @server_name = N'(local)'
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+COMMIT TRANSACTION
+GOTO EndSave
+QuitWithRollback:
+	IF (@@TRANCOUNT > 0) ROLLBACK TRANSACTION
+EndSave:
+
+</TEXTAREA>
+<input type="button" onClick="document.getElementById('copy2').select();document.execCommand('Copy');" value="复制代码" />
+</div>
+</body>
+</html>

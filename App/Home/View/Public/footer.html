@@ -1,0 +1,21 @@
+<div class="zzsc-container">
+	<div id="container">
+		<div id="demo_box">
+			<span class="pop_ctrl"><i class="fa fa-bars"></i></span>
+			<ul id="demo_ul">
+				<li class="demo_li"><a href="{:U('realdata',array('qyid' => $qyid ))}"><div><i class="fa fa-location-arrow"></i></div><div class="demo_title">实时数据</div></a></li>
+				<li class="demo_li"><a href="{:U('alarmdata',array('qyid' => $qyid ))}"><div><i class="fa fa-bell"></i></div><div class="demo_title">报警数据</div></a></li>
+				<li class="demo_li"><a href="{:U('updata',array('qyid' => $qyid ))}"><div><i class="fa fa-arrow-up"></i></div><div class="demo_title">上传数据</div></a></li>
+				<li class="demo_li"><a href="#" onclick="WeixinJSBridge.call('closeWindow');"><div><i class="fa fa-power-off"></i></div><div class="demo_title">关闭窗口</div></a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="__PUBLIC__/js/jquery-1.11.3.min.js" ></script>
+<script src="__PUBLIC__/js/jquery.popmenu.js"></script>
+<script>
+	$(function(){
+		$('#demo_box').popmenu();
+	})
+</script>
+</html>

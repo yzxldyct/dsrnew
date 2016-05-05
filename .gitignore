@@ -1,0 +1,6 @@
+*.DS_Store
+/Thinkphp/
+/App/Common/Conf/
+/App/Runtime/
+/App/Home/Conf/
+/App/Admin/Conf/

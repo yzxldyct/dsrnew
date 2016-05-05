@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html >
+<head>
+<meta charset="UTF-8">
+<title>This is my admin</title>
+<link rel="stylesheet" href="__APUBLIC__/css/normalize.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="__APUBLIC__/css/login.css" type="text/css" media="screen" />
+</head>
+
+<body>
+<div class="login">
+	<h1>Login</h1>
+	<form method="post" action={:U('login/login')}>
+		<input type="text" name="u" placeholder="用户名" required="required" />
+		<input type="password" name="p" placeholder="密码" required="required" />
+		<input class = "login-verify" type="text" name="c" placeholder="验证码" required="required" />
+		&nbsp;&nbsp;&nbsp;
+		<img  class = "verify" src="{:U('login/verify',array())}" onClick="this.src=this.src+'?'+Math.random()" title="点击刷新"/>
+		<button type="submit" class="btn btn-primary btn-block btn-large">登录</button>
+	</form>
+</div>
+
+
+
+</body>
+</html>

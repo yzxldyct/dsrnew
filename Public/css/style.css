@@ -1,0 +1,38 @@
+/*html, body, div, p, ol, ul, li, dl, dt, dd, h1, h2, h3, h4, h5, h6, form,
+input, select, button, textarea, iframe, table, th, td { 
+	margin:5px;
+	padding:0;
+} 
+img {
+	border:0 none; 
+	position:relative; 
+	height: 80px;
+} 
+
+.home{
+	font-size:1em; 
+	font-weight:bold; 
+	text-align:center;
+	line-height:25px;
+}*/
+/*底部登录提示面板*/ 
+.login_panel{ 
+	width:100%; 
+	height:auto;
+	/*background:url(../img/float_bottom_bg.png) 0 0 repeat-x; */
+	overflow:hidden;
+	display:none; 
+	position:fixed; 
+	bottom:0;
+	text-align: center;
+} 
+.login_panel .panel_center{
+	margin:10px auto; 
+	width:auto; 
+	height:auto; 
+	overflow:hidden;
+} 
+
+.foot{
+	font-size:4em; 
+}

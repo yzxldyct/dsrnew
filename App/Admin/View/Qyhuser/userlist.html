@@ -1,0 +1,76 @@
+<include file="Public/header" title="用户列表" />
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-md-6">
+            <a href="{:U('Qyhuser/adduser')}" class="btn btn-success">添加用户</a>
+        </div>
+        <div class="col-md-6">
+            <form action="#" method="post">
+                <div class="form-group input-group">
+                    <input type="text" class="form-control" name="key" placeholder="搜索">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <td>userid</td>
+                <td>avator</td>
+                <td>name</td>
+                <td>sex</td>
+                <td>dep</td>
+                <td>status</td>
+                <td>edit</td>
+            </tr>
+        </thead>
+        <tbody>
+        <foreach name="userlist" item="v">
+            <tr>
+                <td>{$v.userid}</td>
+                <td>
+                    <if condition= " $v['avatar'] ">
+                        <img src="{$v.avatar}64" >
+                    <else />
+                        
+                    </if>
+                </td>
+                <td>{$v.name}</td>
+                <td>
+                    <if condition= " $v['gender'] EQ 1 ">
+                            男
+                        <elseif condition= " $v['gender'] EQ 2 " />
+                            女
+                        <elseif condition= " $v['gender'] EQ 0 "/>
+                            未设置
+                    </if>
+                </td>
+                <td>
+                    <foreach name="v.department" item="vv">
+                        {$vv},                
+                    </foreach>
+                </td>
+                <td>
+                    <if condition= " $v['status'] EQ 1 ">
+                            已关注
+                        <elseif condition= " $v['status'] EQ 2 " />
+                            已冻结
+                        <elseif condition= " $v['status'] EQ 4 "/>
+                            未关注
+                    </if>
+                </td>
+                <td>
+                <a href="{:U('Qyhuser/update',array('userid' => $v['userid']))}">编辑</a>
+                <a href="{:U('Qyhuser/deluser',array('userid' => $v['userid']))}">删除</a>
+                </td>
+            </tr>
+        </foreach>
+        </tbody>
+    </table>
+    <div class="Pagination">{$page}</div>
+</div>
+
+<include file="Public/footer" />

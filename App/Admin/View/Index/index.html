@@ -1,0 +1,82 @@
+<include file="Public/header" title="后台主页" />
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="alert alert-success alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h2>DSR微信管理后台</h2>
+                <p>1.已经实现的功能</p>
+                <ul>
+                    <li>微信同步</li>
+                    <li>自动备份</li>
+                    <li>删除日志</li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div><!-- /.row -->
+
+        <div class="col-lg-3">
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <i class="fa fa-users fa-5x"></i>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <p class="announcement-heading">{$count}</p>
+                            <p class="announcement-text">用户</p>
+                        </div>
+                    </div>
+                </div>
+                <a href="{:U('Member/index')}">
+                    <div class="panel-footer announcement-bottom">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                管理用户
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-lg-3">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <i class="fa fa-link fa-5x"></i>
+                        </div>
+                        <div class="col-xs-6 text-right">
+                            <p class="announcement-heading">7</p>
+                            <p class="announcement-text">企业号用户</p>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer announcement-bottom">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                管理企业号
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                <i class="fa fa-arrow-circle-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div><!-- /.row -->
+
+    <!-- /.row -->
+
+    <!-- /.row -->
+
+</div>
+
+<include file="Public/footer" />

@@ -1,0 +1,122 @@
+<include file="Public/header" title="微信同步" />
+<div id="page-wrapper">
+		<div class="table table-hover table-striped">
+            <h1>微信同步</h1>
+            <h2>STEP1</h2>
+						<a href="http://pan.baidu.com/s/1gfk6DQr" target="_blank">安装文件，点击下载</a>
+            <h2>STEP2</h2>
+<TEXTAREA rows=10 cols=100 id="copy">
+set ANSI_NULLS ON
+set QUOTED_IDENTIFIER ON
+go
+CREATE PROCEDURE [dbo].[trans_mssql_to_mysql]
+@duifbsh varchar(12)='XXXXXXXXXXXXXXXXXXX'
+as
+declare @tbname varchar(100),
+@sql varchar(8000)
+set @tbname=''
+set @sql=''
+--tbl_RemoteUser
+set @tbname=@duifbsh+'_tbl_RemoteUser'
+set @sql='drop table '+@tbname+' select * into  '+@tbname+' from db_DataSource..tbl_RemoteUser'
+exec(@sql)
+--tbl_RemoteUserEquipmentInfo
+set @tbname=@duifbsh+'_tbl_RemoteUserEquipmentInfo'
+set @sql='drop table '+@tbname+' select * into  '+@tbname+' from db_DataSource..tbl_RemoteUserEquipmentInfo'
+exec(@sql)
+--tbl_EquipmentRealData
+set @tbname=@duifbsh+'_tbl_EquipmentRealData'
+set @sql='drop table '+@tbname+' select * into  '+@tbname+' from db_DataSource..tbl_EquipmentRealData'
+exec(@sql)
+--tbl_Equipmentinfo
+set @tbname=@duifbsh+'_tbl_Equipmentinfo'
+set @sql='drop table '+@tbname+' select * into  '+@tbname+' from db_DataSource..tbl_Equipmentinfo'
+exec(@sql)
+--tbl_EquipmentState
+set @tbname=@duifbsh+'_tbl_EquipmentState'
+set @sql='drop table '+@tbname+' select * into  '+@tbname+' from db_DataSource..tbl_EquipmentState'
+exec(@sql)
+--tbl_UserAlarmEquipmentInfo
+set @tbname=@duifbsh+'_tbl_UserAlarmEquipmentInfo'
+set @sql='drop table '+@tbname+' select * into  '+@tbname+' from db_DataSource..tbl_UserAlarmEquipmentInfo'
+exec(@sql)
+--tbl_EquipmentAlarmData
+set @tbname=@duifbsh+'_tbl_EquipmentAlarmData'
+set @sql='drop table '+@tbname+' select top 200* into  '+@tbname+' from db_DataSource..tbl_EquipmentAlarmData order by strdatetime desc'
+exec(@sql)
+--tbl_EquipmentInfo_up
+set @tbname=@duifbsh+'_tbl_EquipmentInfo_up'
+set @sql='drop table '+@tbname+' select * into  '+@tbname+' from db_HumitureUpload..tbl_EquipmentInfo'
+exec(@sql)
+--tbl_UploadDataInfo
+set @tbname=@duifbsh+'_tbl_UploadDataInfo'
+set @sql='drop table '+@tbname+' select top 200* into  '+@tbname+' from db_HumitureUpload..tbl_UploadDataInfo order by createtime desc'
+exec(@sql)
+</TEXTAREA>
+						<input type="button" onClick="document.getElementById('copy').select();document.execCommand('Copy');" value="复制代码" />
+            <h2>STEP3</h2>
+<TEXTAREA rows=10 cols=100 id="copy2">
+USE [msdb]
+GO
+BEGIN TRANSACTION
+DECLARE @ReturnCode INT
+SELECT @ReturnCode = 0
+IF NOT EXISTS (SELECT name FROM msdb.dbo.syscategories WHERE name=N'[Uncategorized (Local)]' AND category_class=1)
+BEGIN
+EXEC @ReturnCode = msdb.dbo.sp_add_category @class=N'JOB', @type=N'LOCAL', @name=N'[Uncategorized (Local)]'
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+END
+DECLARE @jobId BINARY(16)
+EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N'trans_mssql_to_mysql', 
+@enabled=1, 
+@notify_level_eventlog=0, 
+@notify_level_email=0, 
+@notify_level_netsend=0, 
+@notify_level_page=0, 
+@delete_level=0, 
+@description=N'trans_mssql_to_mysql', 
+@category_name=N'[Uncategorized (Local)]', 
+@owner_login_name=N'sa', @job_id = @jobId OUTPUT
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'trans_mssql_to_mysql', 
+@step_id=1, 
+@cmdexec_success_code=0, 
+@on_success_action=1, 
+@on_success_step_id=0, 
+@on_fail_action=2, 
+@on_fail_step_id=0, 
+@retry_attempts=0, 
+@retry_interval=0, 
+@os_run_priority=0, @subsystem=N'TSQL', 
+@command=N'exec trans_mssql_to_mysql', 
+@database_name=N'dsr', 
+@flags=0
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+EXEC @ReturnCode = msdb.dbo.sp_update_job @job_id = @jobId, @start_step_id = 1
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+EXEC @ReturnCode = msdb.dbo.sp_add_jobschedule @job_id=@jobId, @name=N'trans_mssql_to_mysql', 
+@enabled=1, 
+@freq_type=4, 
+@freq_interval=1, 
+@freq_subday_type=4, 
+@freq_subday_interval=1, 
+@freq_relative_interval=0, 
+@freq_recurrence_factor=0, 
+@active_start_date=20150408, 
+@active_end_date=99991231, 
+@active_start_time=0, 
+@active_end_time=235959
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+EXEC @ReturnCode = msdb.dbo.sp_add_jobserver @job_id = @jobId, @server_name = N'(local)'
+IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
+COMMIT TRANSACTION
+GOTO EndSave
+QuitWithRollback:
+IF (@@TRANCOUNT > 0) ROLLBACK TRANSACTION
+EndSave:
+</TEXTAREA>
+						<input type="button" onClick="document.getElementById('copy2').select();document.execCommand('Copy');" value="复制代码" />           
+		</div>
+		<h2><a text-align:"right" href="javascript:history.back(-1)"}>返回</a></h2>
+</div>
+<include file="Public/footer" />

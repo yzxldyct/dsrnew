@@ -1,0 +1,49 @@
+<include file="Public/header" title="添加" />
+<div id="page-wrapper">
+<form action="{:U('add')}" method="post">
+	<div class="form-group">
+		<label>title</label>
+		<input class="form-control" type="text" name="title" placeholder="title">
+	</div>
+	<div class="form-group">
+		<label>出题者</label>
+		<input class="form-control" type="text" name="name" value="{$user}" readonly="true">
+	</div>
+	<div class="form-group">
+		<label>选择分类</label>
+
+	</div>
+	<div class="form-group">
+		<label>手机</label>
+			<input class="form-control" type="text" name="mobile" placeholder="题目">
+		    <input type="radio" name="exam1" id="type" value="1" >
+		    <input type="text" name="mobile" placeholder="选项A">
+		    <input type="radio" name="exam1" id="type" value="1" >
+		    <input type="text" name="mobile" placeholder="选项B">
+		    <input type="radio" name="exam1" id="type" value="1" >
+		    <input type="text" name="mobile" placeholder="选项C">
+		    <input type="radio" name="exam1" id="type" value="1" >
+		    <input type="text" name="mobile" placeholder="选项D">
+	</div>
+	<div class="form-group">
+		<label>weixinid</label>
+		<input class="form-control" type="text" name="weixinid" placeholder="weixinid">
+	</div>
+	<div class="form-group">
+        <label>sex</label>
+        <label class="radio-inline">
+          <input type="radio" name="gender" id="type" value="1" checked="checked">男
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="gender" id="type" value="2">女
+        </label>
+    </div>
+	<div class="form-group">
+		<button class="btn btn-success" type="submit" >添加</button>
+	</div>
+
+
+</form>
+</div>
+
+<include file="Public/footer" />

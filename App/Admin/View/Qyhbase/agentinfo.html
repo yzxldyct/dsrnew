@@ -1,0 +1,39 @@
+<include file="Public/header" title="应用列表" />
+<div id="page-wrapper">
+    <table>
+    <tr>
+        <td>应用Logo</td>
+        <td><img src="{$agentinfo.square_logo_url}" height="50" weight="50 " alt=""></td>
+    </tr>
+    <tr>
+        <td>应用名称</td>
+        <td>{$agentinfo.name}</td>
+    </tr>  
+    <tr>
+        <td>应用ID</td>
+        <td>{$agentinfo.agentid}</td>
+    </tr> 
+    <tr>
+        <td>可见范围</td>
+        <!-- <td>{$departmentinfoname.0.name}</td> -->
+       <!--  <td>{$agentinfo.allow_partys.partyid.0}&nbsp;&nbsp;&nbsp;{$agentinfo.allow_tags.tagid.0}&nbsp;&nbsp;&nbsp;{$agentinfo.allow_userinfos.user.0}</td> -->
+        <!-- <td>{$agentinfo:allow_partys:partyid}&nbsp;&nbsp;&nbsp;{$agentinfo.allow_tags.tagid.0}&nbsp;&nbsp;&nbsp;{$agentinfo.allow_userinfos.user.0}</td> -->
+        <!-- <td>
+        <foreach name="departmentinfoname" item="v">
+        {$v.0.name}
+        {$v.0.name} 
+        </foreach>
+        </td> -->
+        <td><volist name="agentinfo" id="vo">
+        <volist name="vo['partyid']" id="v">
+        {$v}|
+        </volist>
+        </volist></td>
+    </tr> 
+    </table>          
+</div>
+<include file="Public/footer" />
+
+<!-- <volist name="v.partyid" id="vv">
+        {$vv}<br/>
+        </volist>  -->

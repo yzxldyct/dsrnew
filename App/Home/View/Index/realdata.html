@@ -1,0 +1,45 @@
+<body>
+	<div>
+		<table class='zebra'>
+			<tr>
+				<th>序列号</th>
+				<th>地点</th>
+				<th>温度</th>
+				<th>湿度</th>
+				<th>时间</th>
+				<th>容量</th>
+			</tr>
+			<foreach name='realdata' item='v'>
+				<tr>
+					<td> {$v.strsn} </td>
+					<td> {$v.strname} </td>
+					<if condition= " $v.strchannel1val GT $v.ftemperatureuplimit ">
+						<td><font color="red">{$v.strchannel1val} </font></td>
+					<elseif condition= " $v.strchannel1val LT $v.ftemperaturelowlimit " />
+						<td><font color="blue">{$v.strchannel1val} </font></td>
+					<else />
+						<td>{$v.strchannel1val}</td>
+					</if>
+					<if condition= " $v.strchannel2val GT $v.fhumidityuplimit ">
+						<td><font color="red">{$v.strchannel2val} </font></td>
+					<elseif condition= " $v.strchannel2val LT $v.fhumiditylowlimit " />
+						<td><font color="blue">{$v.strchannel2val} </font></td>
+					<else />
+						<td>{$v.strchannel2val}</td>
+					</if>
+					<if condition= " strtotime(date('Y-m-d H:i:s'))-600  GT strtotime($v['strdatetime'])  ">
+						<td><font color="red">{$v.datetime} </font></td>
+					<else />
+						<td>{$v.datetime}</td>
+					</if>
+					<if condition= " $v['workstate'] EQ 2 ">
+						<td>{:round((1-$v['remainmem']/$v['totalmem'])*100,1)} </td>
+					<else />
+						<td><font color="red">停</font></td>
+					</if>				
+				</tr>
+			</foreach>
+		</table>
+	</div>
+</body>
+

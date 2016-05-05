@@ -1,0 +1,43 @@
+<include file="Public/header" title="Hr" />
+<div id="page-wrapper">
+    <div class="col-md-6">
+        <a href="{:U('add')}" class="btn btn-success">添加题库</a>
+    </div>
+	<div class="col-md-6">
+            <form action="#" method="post">
+                <div class="form-group input-group">
+                    <input type="text" class="form-control" name="key" placeholder="搜索">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <td>id</td>
+                <td>class</td>
+                <td>title</td>
+                <td>edit</td>
+            </tr>
+        </thead>
+        <tbody>
+        <foreach name="userlist" item="v">
+            <tr>
+                <td>{$v.id}</td>
+                <td></td>
+                <td></td>
+                <td>
+                <a href="{:U('Qyhuser/update',array('userid' => $v['userid']))}">编辑</a>
+                <a href="{:U('Qyhuser/deluser',array('userid' => $v['userid']))}">删除</a>
+                </td>
+            </tr>
+        </foreach>
+        </tbody>
+    </table>
+    <div class="Pagination">{$page}</div>
+</div>
+<include file="Public/footer" />
+

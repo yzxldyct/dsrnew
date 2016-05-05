@@ -1,0 +1,46 @@
+<include file="Public/header" title="更新企业信息" />
+<div id="page-wrapper">
+<form action="{:U('update')}" method="post">
+	<div class="form-group">
+		<label>id</label>
+		<input class="form-control" type="text" name="id" value="{$model.id}" readonly="true">
+	</div>
+	<div class="form-group">
+		<label>qyid</label>
+		<input class="form-control" type="text" name="qyid" value="{$model.qyid}" >
+	</div>
+	<div class="form-group">
+		<label>qyname</label>
+		<input class="form-control" type="text" name="qyname" value="{$model.qyname}" >
+	</div>
+	<div class="form-group">
+		<label>agentid</label>
+		<input class="form-control" type="text" name="agentid" value="{$model.agentid}" >
+	</div>
+	<div class="form-group">
+		<label>appid</label>
+		<input class="form-control" type="text" name="appid" value="{$model.appid}" >
+	</div>
+	<div class="form-group">
+		<label>appsercet</label>
+		<input class="form-control" type="text" name="appsercet" value="{$model.appsercet}" >
+	</div>
+	<div class="form-group">
+		<label>touserid</label>
+		<input class="form-control" type="text" name="touserid" value="{$model.touserid}" >
+	</div>
+	<div class="form-group">
+		<label>uprow</label>
+		<input class="form-control" type="text" name="uprow" value="{$model.uprow}" >
+	</div>
+	
+	<div class="form-group">
+		<input type="hidden" name="id" value="{$model.id}">
+		<button class="btn btn-success" type="submit" >更新</button>
+	</div>
+
+
+</form>
+</div>
+
+<include file="Public/footer" />

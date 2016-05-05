@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<body>
+<table class='zebra'>
+	<tr>
+		<th>序列号</th>
+		<th>地点</th>
+		<th>温度</th>
+		<th>湿度</th>
+		<th>时间</th>
+	</tr>
+	<foreach name='data' item='v'>
+		<tr>
+			<td> {$v.strsn} </td>
+			<td> {$v.strname} </td>
+			<if condition= " $v.strchannel1val GT $v.ftemperatureuplimit ">
+				<td><font color="red">{$v.strchannel1val} </font></td>
+			<elseif condition= " $v.strchannel1val LT $v.ftemperaturelowlimit " />
+				<td><font color="blue">{$v.strchannel1val} </font></td>
+			<else />
+				<td>{$v.strchannel1val}</td>
+			</if>
+			<if condition= " $v.strchannel2val GT $v.fhumidityuplimit ">
+				<td><font color="red">{$v.strchannel2val} </font></td>
+			<elseif condition= " $v.strchannel2val LT $v.fhumiditylowlimit " />
+				<td><font color="blue">{$v.strchannel2val} </font></td>
+			<else />
+				<td>{$v.strchannel2val}</td>
+			</if>
+			<td>{$v.datetime}</td>						
+		</tr>
+	</foreach>
+</table>
+</body>
+</html>

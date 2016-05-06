@@ -12,13 +12,14 @@ function check_verify($code, $id = ""){
 
 function gettoken($qyid){
 	$map['qyid'] = $qyid;
-  $config = M('dsr_config') ->where($map) -> find();
+  $config = M('dsr_config') -> where($map) -> find();
   $appid = $config['appid'];
   $appsecret = $config['appsercet'];
   $url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=$appid&corpsecret=$appsecret";
   if($config['tokenextime'] < time()){
   	$data = curlget($url);
   	$a['token'] = $data['access_token'];
+  	$token = $a['token'];
   	if($a['token']){
   		$a['tokenextime'] = time() + 7000;
   		$config = M('dsr_config') -> data($a) -> where($map) -> save();

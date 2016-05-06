@@ -14,7 +14,7 @@ class MemberController extends BaseController{
         } 
         
         $count  = $model->where($where)->count();// 查询满足要求的总记录数
-        $Page = new \Think\page($count,15);// 实例化分页类 传入总记录数和每页显示的记录数
+        $Page = new \Think\Page($count,15);// 实例化分页类 传入总记录数和每页显示的记录数
         $show = $Page -> show();// 分页显示输出
         $member = $model -> limit($Page->firstRow.','.$Page->listRows) -> where($where) -> order('id') -> select();
         //$member = $model -> page(1,10) -> where($where) -> order('id DESC') -> select();

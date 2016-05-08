@@ -14,13 +14,12 @@ class LoginController extends Controller {
 
     public function login(){
 			$verify = I('param.c','');  
-			if(!check_verify($verify)){  
-		  	$this -> error("验证码输错了！",$this -> site_url,3);  
+			if(!check_verifymsg($verify)){  
+		  	$this -> error("验证码输错了！",$this -> site_url,1);  
 			}  
 
 			$user = I('post.u');
 			$password = md5(I('post.p'));
-
 			$map['username'] = $user;
 			$map['password'] = $password;
 			$this -> check = $check = M("dsr_user") -> where($map) -> find();
@@ -41,6 +40,21 @@ class LoginController extends Controller {
         
     }
 
+    public function postverify(){
+    		//if(IS_AJAX){
+    			$config = array(
+						'length'      => 4,     // 验证码位数
+						'codeSet' => '0123456789',
+						'expire' => 600,
+					);
+					$Verify =  new \Think\Verifymsg($config);
+					$touserid = I('post.username');
+					$Verify -> postcode($touserid);
+    		// }else{
+    		// 	$this -> error('错误页面');
+    		// }
+    }
+
 		public function verify(){
 				$config = array(
 				  'fontSize'    =>    18,    // 验证码字体大小
@@ -51,7 +65,18 @@ class LoginController extends Controller {
 					//'imageH' => 40,
 				);
 				$Verify =  new \Think\Verify($config);
-				$Verify->entry();
+				$Verify -> entry();
+				p($Verify);die;
+    }
+
+    public function verifymsg(){
+				$config = array(
+					'length'      =>  4,     // 验证码位数
+					'codeSet' => '0123456789',
+					'expire' => 600,
+				);
+				$Verify =  new \Think\Verifymsg($config);
+				$Verify -> entry();
     }
 
     public function logout(){

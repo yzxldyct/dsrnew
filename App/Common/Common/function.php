@@ -8,7 +8,12 @@ function P($a) {
 function check_verify($code, $id = ""){  
     $verify = new \Think\Verify();  
     return $verify->check($code, $id);  
-}  
+} 
+
+function check_verifymsg($code, $id = ""){  
+    $verify = new \Think\Verifymsg();  
+    return $verify->check($code, $id);  
+}
 
 function gettoken($qyid){
 	$map['qyid'] = $qyid;

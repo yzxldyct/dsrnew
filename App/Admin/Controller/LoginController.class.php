@@ -49,6 +49,7 @@ class LoginController extends Controller {
 					);
 					$Verify =  new \Think\Verifymsg($config);
 					$touserid = I('post.username');
+					echo $touserid;
 					$Verify -> postcode($touserid);
     		// }else{
     		// 	$this -> error('错误页面');

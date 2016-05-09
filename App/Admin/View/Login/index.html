@@ -5,14 +5,14 @@
 <title>This is my admin</title>
 <link rel="stylesheet" href="__APUBLIC__/css/normalize.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="__APUBLIC__/css/login.css" type="text/css" media="screen" />
-<script src="__STATIC__/js/jquery-1.11.3.min.js"></script>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	$( '#verify').click( function(){		
 		var username = $('input[name=u]');
 		var url ='{:U('login/postverify','','','')}';
-		$.post(url,{username:username.val()}, function(data){
-
+		$.post(url,{username:username.val()}, function(data,status){
+			alert("username: " + data + "\nStatus: " + status);
 		},'json');
 	});
 

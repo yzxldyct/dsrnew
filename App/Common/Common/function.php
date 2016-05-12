@@ -4,6 +4,14 @@ function P($a) {
 	print_r($a);
 	//echo "<br>";
 }
+function s2m($expiretime){
+	if($expiretime >60){
+		$data = ($expiretime/60).'分钟';
+	}else{
+		$data = $expiretime.'秒';
+	}
+	return $data;
+}
 //验证码
 function check_verify($code, $id = ""){  
     $verify = new \Think\Verify();  

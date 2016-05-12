@@ -41,19 +41,24 @@ class LoginController extends Controller {
     }
 
     public function postverify(){
-    		//if(IS_AJAX){
+    		if(IS_AJAX){
     			$config = array(
-						'length'      => 4,     // 验证码位数
+						'length'  => 4, // 验证码位数
 						'codeSet' => '0123456789',
-						'expire' => 600,
+						'expire' => 300,
 					);
 					$Verify =  new \Think\Verifymsg($config);
-					$touserid = I('post.username');
-					echo $touserid;
-					$Verify -> postcode($touserid);
-    		// }else{
-    		// 	$this -> error('错误页面');
-    		// }
+					$touserid = I('username');
+					$result = $Verify -> postcode($touserid);
+					$errcode = json_decode($result)->errcode;
+					if ($errcode == 0) {
+            $data = "验证码发送成功！请在微信企业号内查看"; 
+            $this -> ajaxReturn($data,'json');    
+	    		}else{
+	    			$data = "验证码发送失败！"; 
+	    			$this -> ajaxReturn($data,'json');  
+	    		}
+	    	}
     }
 
 		public function verify(){
@@ -70,22 +75,27 @@ class LoginController extends Controller {
 				p($Verify);die;
     }
 
-    public function verifymsg(){
-				$config = array(
-					'length'      =>  4,     // 验证码位数
-					'codeSet' => '0123456789',
-					'expire' => 600,
-				);
-				$Verify =  new \Think\Verifymsg($config);
-				$Verify -> entry();
-    }
-
     public function logout(){
     		session('adminid',null);
 				session('admin',null);
 				layout(false);
         $this -> redirect(index);
 
+    }
+
+    public function logincheck(){			
+			$user = I('post.username');
+			$password = md5(I('post.password'));
+			$map['username'] = $user;
+			$map['password'] = $password;
+			$this -> check = $check = M("dsr_user") -> where($map) -> find();
+			if($check){
+				$data = 1; 
+        $this -> ajaxReturn($data,'json'); 
+			}else{
+				$data = 0;
+				$this -> ajaxReturn($data,'json'); 
+			}
     }
 }
 

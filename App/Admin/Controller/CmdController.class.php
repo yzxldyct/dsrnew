@@ -1,6 +1,6 @@
 <?php
 namespace Admin\Controller;
-use Think\Controller;
+use Admin\Controller;
 class CmdController extends BaseController {
 
     public function index(){

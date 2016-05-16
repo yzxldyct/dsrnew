@@ -16,31 +16,31 @@ $(function(){
     var resend = setInterval(function(){
       count--;
       if (count > 0){
-        btn.html(count+'秒后可重新获取').attr('disabled',true).css('cursor','not-allowed');
+        btn.val(count+'秒后可重新获取').attr('disabled',true).css('cursor','not-allowed');
         $.cookie("captcha", count, {path: '/', expires: (1/86400)*count});
       }else {
         clearInterval(resend);
-        btn.html("获取验证码").removeClass('disabled').removeAttr('disabled style');
+        btn.val("获取验证码").removeClass('disabled').removeAttr('disabled style');
       }
     }, 1000);
   }
   $('#verify').click(function(){
+    $("#inverify").focus();
     var btn = $(this);
-    var a = $('.message');
-    a.fadeIn();
-    var count = 10;
+    $('.message').fadeIn();
+    var count = 30;
     var username = $('input[name=u]');  
     $.post(url,{username:username.val()}, function(data){
-      a.val(data);
+      $('.message').val(data);
     },'json');
     var resend = setInterval(function(){
       count--;
       if (count > 0){
-        btn.html(count+"秒后可重新获取");
+        btn.val(count+"秒后可重新获取");
         $.cookie("captcha", count, {path: '/', expires: (1/86400)*count});
       }else {
         clearInterval(resend);
-        btn.html("获取验证码").removeAttr('disabled style');
+        btn.val("获取验证码").removeAttr('disabled style');
       }
     }, 1000);
     btn.attr('disabled',true).css('cursor','not-allowed');

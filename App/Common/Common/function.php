@@ -2,7 +2,6 @@
 function P($a) {
 	echo "<pre>";
 	print_r($a);
-	//echo "<br>";
 }
 function s2m($expiretime){
 	if($expiretime >60){

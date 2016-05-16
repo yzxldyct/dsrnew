@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<style type="text/css">
+    .ipt {
+        width: 300px;
+    }
+    label {
+        width: 130px;
+        display: block;
+    }
+    ul li {
+        list-style:none;
+    }
+		.ui-progressbar {
+		    position: relative;
+		  }
+		  .progress-label {
+		    position: absolute;
+		    left: 50%;
+		    top: 4px;
+		    font-weight: bold;
+		    text-shadow: 1px 1px 0 #fff;
+		  }
+		#progressbar{
+		    height:30px;
+		    display:none;
+		}
+		#dialog{
+		    display:none;
+		}
+</style>
+<script type="text/javascript" src="__PUBLIC__/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    var Qiniu_UploadUrl = "http://up.qiniu.com";
+    var progressbar = $("#progressbar"),
+        progressLabel = $(".progress-label");
+    // progressbar.progressbar({
+    //     value: false,
+    //     change: function() {
+    //         progressLabel.text(progressbar.progressbar("value") + "%");
+    //     },
+    //     complete: function() {
+    //         progressLabel.text("Complete!");
+    //     }
+    // });
+    $("#btn_upload").click(function() {
+        //普通上传
+        var Qiniu_upload = function(f, token, key) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', Qiniu_UploadUrl, true);
+            var formData, startDate;
+            formData = new FormData();
+            if (key !== null && key !== undefined) formData.append('key', key);
+            formData.append('token', token);
+            formData.append('file', f);
+            var taking;
+            xhr.upload.addEventListener("progress", function(evt) {
+                if (evt.lengthComputable) {
+                    var nowDate = new Date().getTime();
+                    taking = nowDate - startDate;
+                    var x = (evt.loaded) / 1024;
+                    var y = taking / 1000;
+                    var uploadSpeed = (x / y);
+                    var formatSpeed;
+                    if (uploadSpeed > 1024) {
+                        formatSpeed = (uploadSpeed / 1024).toFixed(2) + "Mb\/s";
+                    } else {
+                        formatSpeed = uploadSpeed.toFixed(2) + "Kb\/s";
+                    }
+                    var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+                    //progressbar.progressbar("value", percentComplete);
+                    // console && console.log(percentComplete, ",", formatSpeed);
+                }
+            }, false);
+
+            xhr.onreadystatechange = function(response) {
+                if (xhr.readyState == 4 && xhr.status == 200 && xhr.responseText != "") {
+                    var blkRet = JSON.parse(xhr.responseText);
+                    console && console.log(blkRet);
+                    $("#dialog").html(xhr.responseText);
+                } else if (xhr.status != 200 && xhr.responseText) {
+
+                }
+            };
+            startDate = new Date().getTime();
+            $("#progressbar").show();
+            xhr.send(formData);
+        };
+        var token = $("#token").val();
+        if ($("#file")[0].files.length > 0 && token != "") {
+            Qiniu_upload($("#file")[0].files[0], token, $("#key").val());
+        } else {
+            console && console.log("form input error");
+        }
+    })
+})
+</script>
+<body>
+<!-- <form method="post" action="http://up.qiniu.com" enctype="multipart/form-data">
+  <input name="token" type="hidden" value="{$token}">
+  <input name="file" type="file" />
+  <input type="submit" value="上传"/>
+</form>   -->
+<ul>
+    <li>
+        <input id="token" name="token" type="hidden" class="ipt" value="{$token}">
+    </li>
+    <li>
+        <label for="key">key:</label>
+        <input id="key" name="key" class="ipt" value="">
+    </li>
+    <li>
+        <label for="bucket">照片:</label>
+        <input id="file" name="file" class="ipt" type="file" />
+    </li>
+    <li>
+        <input id="btn_upload" type="button" value="提交">
+    </li>
+    <div id="progressbar"><div class="progress-label"></div></div>
+</ul>
+<div id="dialog" title="上传成功"></div>
+
+<!-- <form method="post" action="http://up.qiniu.com" enctype="multipart/form-data">
+    <ul>
+        <li>
+            <label for="token">token:</label>
+            <input id="token" name="token" type="hidden" class="ipt" value="{$token}">
+
+        </li>
+        <li>
+            <label for="key">key:</label>
+            <input name="key" class="ipt" value="">
+        </li>
+        <li>
+            <label for="x:username">姓名(自定义变量):</label>
+            <input name="x:username" class="ipt" value="">
+        </li>
+        <li>
+            <label for="bucket">照片:</label>
+            <input name="file" class="ipt" type="file" />
+        </li>
+        <li>
+            <input type="submit" value="提交">
+        </li>
+    </ul>
+</form> -->
+</body>
+</html>

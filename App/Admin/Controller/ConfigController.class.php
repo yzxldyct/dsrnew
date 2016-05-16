@@ -22,10 +22,6 @@ class ConfigController extends BaseController{
         $this->assign('page',$show);
         $this->display();     
     }
-
-    /**
-     * 添加用户
-     */
     public function add(){
         //默认显示添加表单
         if (!IS_POST) {

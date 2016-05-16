@@ -31,7 +31,8 @@ class LoginController extends Controller {
 			if($check){
 				session('adminid',$check['id']);
 				session('admin',$user);
-				M('dsr_user') -> where($map) -> save($data);
+				$d = M('dsr_loginlog') -> where($map) -> field('logintime,loginip') -> order('logintime desc') -> find();
+				M('dsr_user') -> where($map) -> save($d);
 				M('dsr_loginlog') -> add($data);
 				$this ->redirect('Index/index');
 			}else{
@@ -52,7 +53,7 @@ class LoginController extends Controller {
 					$result = $Verify -> postcode($touserid);
 					$errcode = json_decode($result)->errcode;
 					if ($errcode == 0) {
-            $data = "验证码发送成功！请在微信企业号内查看"; 
+            $data = "验证码已发送至微信企业号！"; 
             $this -> ajaxReturn($data,'json');    
 	    		}else{
 	    			$data = "验证码发送失败！"; 

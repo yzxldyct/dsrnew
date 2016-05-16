@@ -101,27 +101,36 @@ input {
 	transition: box-shadow .5s ease;
 }
 input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgba(255,255,255,0.2); }
-@media screen and (max-width: 200px) and (min-width: 800px) {
+@media (max-width: 1000px) {
 	h1 {
 		font-size: 8em;
 	}
   .login { 
-		top: 20%;
-		left: 20%;
-		//margin: auto;
-		width:90%;
+		top: 10%;
+		left: 30%;
+		width:70%;
 		//height:400px;
 	}
 	input {
-		height: 150px;
-		font-size: 5em;
-		padding: 15px;
+		height: 130px;
+		font-size: 3em;
+		margin-bottom: 30px;
+		-webkit-appearance:none;
 	}
 	.loginverify {
-		width: 48%
+		width: 48%;
+		margin-bottom: 30px;
 	}
 	.btn-large {
-		font-size: 5em;
+		font-size: 4em;
+		height: 150px;
+	}
+	.right {
+		height: 130px;
+		font-size: 2em;
+	}
+	.message {
+		font-size: 3em;
 	}
 }
 

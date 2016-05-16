@@ -17,7 +17,6 @@ class HrController extends BaseController{
         $Page = new \Think\Page($count,15);// 实例化分页类 传入总记录数和每页显示的记录数
         $show = $Page -> show();// 分页显示输出
         $member = $model -> limit($Page->firstRow.','.$Page->listRows) -> where($where) -> order('id') -> select();
-        //$member = $model -> page(1,10) -> where($where) -> order('id DESC') -> select();
         $this->assign('member', $member);
         $this->assign('page',$show);
         $this->display();  
@@ -26,10 +25,9 @@ class HrController extends BaseController{
 
     public function add(){
         if (!IS_POST) {
-
             $user = session('admin');
             $this -> assign('user',$user);
-            $this->display();
+            $this -> display();
         }
         if (IS_POST) {
             //如果用户提交数据

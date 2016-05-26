@@ -17,7 +17,6 @@ class ConfigController extends BaseController{
         $Page = new \Think\Page($count,15);// 实例化分页类 传入总记录数和每页显示的记录数
         $show = $Page -> show();// 分页显示输出
         $config = $model -> limit($Page->firstRow.','.$Page->listRows) -> where($where) -> order('id') -> select();
-        //$member = $model -> page(1,10) -> where($where) -> order('id DESC') -> select();
         $this->assign('config', $config);
         $this->assign('page',$show);
         $this->display();     
@@ -29,7 +28,6 @@ class ConfigController extends BaseController{
         }
         if (IS_POST) {
             //如果用户提交数据
-            //p(I());die;
             $data = I('post.');
             $model = D("dsr_config");
             if (!$model->create()) {
@@ -38,7 +36,7 @@ class ConfigController extends BaseController{
                 exit();
             } else {
                 if ($model->add($data)) {
-                    $this->success("添加成功", U('config/index'));
+                    $this->success("添加成功", U('index'));
                 } else {
                     $this->error("添加失败");
                 }
@@ -50,7 +48,6 @@ class ConfigController extends BaseController{
         if (!IS_POST) {
             $model = M('dsr_config')->find(I('id',"addslashes"));
             $this->assign('model',$model);
-            //p($model);die;
             $this->display();
         }
         if (IS_POST) {
@@ -59,12 +56,10 @@ class ConfigController extends BaseController{
                 $this->error($model->getError());
             }else{
                 //验证密码是否为空   
-                $data = I();
-                //
-                
+                $data = I();                
                 //更新
                 if ($model -> save($data)) {
-                    $this->success("用户信息更新成功", U('config/index'));
+                    $this->success("用户信息更新成功", U('index'));
                 } else {
                     $this->error("未做任何修改,用户信息更新失败");
                 }        
@@ -72,7 +67,7 @@ class ConfigController extends BaseController{
         }
     }
  
-    public function delete($id){
+/*    public function delete($id){
     	$id = intval($id);
     	if(C('SUPER_ADMIN_ID') == $id) $this->error("超级管理员不可禁用!");
         $model = M('dsr_user');
@@ -91,5 +86,5 @@ class ConfigController extends BaseController{
         }else{
             $this->error("状态更新失败");
         }
-    }
+    }*/
 }

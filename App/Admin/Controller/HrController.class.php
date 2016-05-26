@@ -8,8 +8,6 @@ class HrController extends BaseController{
             $model = M('dsr_hr_exam');  
         }else{
             $where['title'] = array('like',"%$key%");
-            //$where['email'] = array('like',"%$key%");
-            //$where['_logic'] = 'or';
             $model = M('dsr_hr_exam')->where($where); 
         } 
         
@@ -35,18 +33,16 @@ class HrController extends BaseController{
             $data = I('post.');
             $data['password'] = md5(I('post.password'));
             $data['createtime'] = date('Y-m-d H:i:s');
-            //p($data);die;
             $model = D("dsr_user");
-            //p($model);die;
             if (!$model->create()) {
                 // 如果创建失败 表示验证没有通过 输出错误提示信息
                 $this->error($model->getError());
                 exit();
             } else {
                 if ($model->add($data)) {
-                    $this->success("用户添加成功", U('member/index'));
+                    $this->success("添加成功", U('index'));
                 } else {
-                    $this->error("用户添加失败");
+                    $this->error("添加失败");
                 }
             }
         }

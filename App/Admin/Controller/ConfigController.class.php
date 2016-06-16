@@ -59,9 +59,9 @@ class ConfigController extends BaseController{
                 $data = I();                
                 //更新
                 if ($model -> save($data)) {
-                    $this->success("用户信息更新成功", U('index'));
+                    $this->success("更新成功", U('index'));
                 } else {
-                    $this->error("未做任何修改,用户信息更新失败");
+                    $this->error("更新失败");
                 }        
             }
         }

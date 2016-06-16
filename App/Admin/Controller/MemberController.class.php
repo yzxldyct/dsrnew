@@ -8,7 +8,7 @@ class MemberController extends BaseController{
             $model = M('dsr_user');  
         }else{
             $where['username'] = array('like',"%$key%");
-            $where['email'] = array('like',"%$key%");
+            $where['mobile'] = array('like',"%$key%");
             $where['_logic'] = 'or';
             $model = M('dsr_user')->where($where); 
         } 

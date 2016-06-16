@@ -57,23 +57,28 @@ class IndexController extends Controller {
 			}  
     }
 
-    public function updata(){
-    	$qyid = I('get.qyid');
-    	$userid = session('userid');
-    	if($qyid && $userid){
-	    	$qyname = session('qyname');
-	    	$uprow = session('uprow');
-	    	$sql="select a.strsn,a.strname,a.fHumidityLowLimit,a.fTemperatureUpLimit,a.fTemperatureLowLimit,a.fHumidityUpLimit,b.temperature,b.humidity,DATE_FORMAT(b.createtime,'%m-%d %H:%i') createtime from ".$qyid."_tbl_Equipmentinfo a inner join ".$qyid."_tbl_EquipmentInfo_up c on a.strsn=c.sn inner join ".$qyid."_tbl_UploadDataInfo b on c.equipid=b.equipid  where uploadflag='1' order by b.createtime desc,a.strsn asc limit $uprow";
-				$data = M() -> query("$sql");
-				$this -> assign('data',$data);
-				$this -> data -> $data;
-				$this -> assign('qyname',$qyname);
-				$this -> assign('qyid',$qyid);
-				$this -> display();    
+		public function updata(){
+			$qyid = I('get.qyid');
+			$userid = session('userid');
+			$sql = "show tables like '".$qyid."_tbl_EquipmentInfo_up'";
+			$data = M() -> query("$sql");
+			$qyname = session('qyname');
+			$this -> assign('qyname',$qyname);
+			$this -> assign('qyid',$qyid);
+			if($qyid && $userid){					
+				if($data){
+					$uprow = session('uprow');
+					$sql = "select a.strsn,a.strname,a.fHumidityLowLimit,a.fTemperatureUpLimit,a.fTemperatureLowLimit,a.fHumidityUpLimit,b.temperature,b.humidity,DATE_FORMAT(b.createtime,'%m-%d %H:%i') createtime from ".$qyid."_tbl_Equipmentinfo a inner join ".$qyid."_tbl_EquipmentInfo_up c on a.strsn=c.sn inner join ".$qyid."_tbl_UploadDataInfo b on c.equipid=b.equipid  where uploadflag='1' order by b.createtime desc,a.strsn asc limit $uprow";
+					$data = M() -> query("$sql");
+					$this -> assign('data',$data);
+					$this -> data -> $data;
+					$this -> display();  
+				}else{
+					$this -> show("<br><br><center><font size=20>上传系统未开启！</font></center>");
+				}
 			}else{
 				$this -> error("错误页面");
 			}
-    }
-
+		}
 
 }
